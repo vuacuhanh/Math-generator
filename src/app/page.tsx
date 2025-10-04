@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler, type Resolver } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Resolver } from "react-hook-form";
 import { motion } from "framer-motion";
 import {
   Loader2, Sparkles, BookOpen, UploadCloud, Settings2, Puzzle,
@@ -64,10 +63,12 @@ export default function Home() {
   const [word, setWord] = useState(0);
   const [mode, setMode] = useState<Mode>("easy_to_hard");
 
-  const resolver: Resolver<FormValues> = zodResolver(schema);
+
+  type FormValues = z.infer<typeof schema>;
+  const resolver = zodResolver(schema) as unknown as Resolver<FormValues>; 
 
   const { register, handleSubmit, watch, setValue } = useForm<FormValues>({
-    resolver,
+    resolver,           
     defaultValues: {
       grade: 2,
       operations: ["+", "-"],
@@ -87,7 +88,7 @@ export default function Home() {
   const selectedOps = watch("operations");
   const cfg = watch();
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = async (values) => {
     try {
       setLoading(true);
       const data = await generateProblems(values as unknown as GenerationConfig);

@@ -1,7 +1,7 @@
 // lib/api.ts
 import { GenerationConfig, Problem, Evaluation, AssemblePayload } from "./types";
 
-const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "https://web-production-a7c6c.up.railway.app";
 
 export async function generateProblems(cfg: GenerationConfig): Promise<Problem[]> {
   const res = await fetch(`${BASE}/api/generate`, {
